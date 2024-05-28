@@ -6,9 +6,9 @@ import clsx from 'clsx';
 //import usePathname and clsx to spiff up ui
 
 const links = [
-    { name: 'home', href: '/dashboard'},
-    { name: 'hunts', href: '/dashboard/hunts'},
-    { name: 'dex', href: '/dashboard/dex'},
+    { name: 'Dashboard', href: '/dashboard'},
+    { name: 'Hunts', href: '/dashboard/hunts'},
+    { name: 'Shiny Dex', href: '/dashboard/dex'},
 ];
 
 export default function NavLinks() {

@@ -9,3 +9,14 @@ export default function EncounterDisplay({value}: {value: string}) {
         }}>{value}</button>
     );
 }
+
+// change to be one button that alternates between pause and play
+export function ToggleButton() {
+    function handleClick() {
+        const toggle = (document.getElementById('toggleButton') as HTMLInputElement);
+        (toggle.value === 'pause') ? toggle.value = 'play' : toggle.value = 'pause';
+    }
+    return (
+        <input id="toggleButton" type="button" value="pause" onClick={handleClick}/>
+    )
+}

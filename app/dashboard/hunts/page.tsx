@@ -7,7 +7,7 @@ export default function Page() {
     return (
         <div className="">    
             <p>Shiny hunting page</p>
-            <div className="">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3">
                 {hunts.map((hunt) => (
                     <div key={hunt.id}>
                         <Card title={hunt.dexNum} value={hunt.currNum} modifiers={hunt.boosts}/>
