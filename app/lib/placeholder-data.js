@@ -4,6 +4,7 @@
 // Add a timer for hunts too, maybe guesstimate number of encounters for SV LA using timer?
 // Flawed because different mons have different speeds, maybe just track number of sandwiches for SV
 // Maybe track number of pokemon in outbreak on client side? calculate currNum on the backend and send result to DB?
+// Could change data so boosts are a seperate table from hunts. Has all possible mods and a bool for whether active or not?
 
 const users = [
     { id: '2947367', name: 'Johnny Gainz', email: 'johnny@gainz.com', password: '123456' },
