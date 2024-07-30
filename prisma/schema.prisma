@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model hunts {
+  id         String  @id @db.Uuid
+  username   String? @db.VarChar(255)
+  dexnum     Int
+  encounters Int
+  ongoing    Boolean
+  game       String  @db.VarChar(255)
+  method     String  @db.VarChar(255)
+  users      users?  @relation(fields: [username], references: [username], onUpdate: NoAction, map: "fk_username")
+}
+
+model users {
+  id         Int       @id @default(autoincrement())
+  username   String    @unique @db.VarChar(255)
+  password   String    @db.VarChar(255)
+  email      String    @unique @db.VarChar(255)
+  created    DateTime  @db.Timestamp(6)
+  last_login DateTime? @db.Timestamp(6)
+  hunts      hunts[]
+}
