@@ -20,17 +20,12 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+## About
 
-To learn more about Next.js, take a look at the following resources:
+Jade Orb is a project I started spontaneously, and I don't really see myself deploying this as an actual project for others to use. Maybe I will in the future, but for now I think I'll just code it up and maybe use it for myself. The purpose of this project is to help me gain a grasp on things such as workflows, migrations, and SDLCs (specifically Agile) or to improve my skills with the technologies, languages, and methods used in this project.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Background Info (Shiny hunting)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+This project was inspired by a hobby I have called "shiny hunting," a term in the pokemon community that refers to looking for a shny pokemon, which is a pokemon with a different color palette than normal and a unique sparkling intro upon entering the battlefield. They provide no advantage over regular pokemon and are only sought after for their rarity. In older games, the "hunts" for shiny pokemon would last hours and "hunters" would sometimes track the number of encounters on calculators or the like.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Because the time between encountering a pokemon would take several seconds in older pokemon games, trackers dont need to be anything more than counters that increment with a button press, maybe with a timer if you want to know how long you spent on a hunt as well. Despite this, there are other features such as having multiple counters and different increment amounts for multiple concurrent hunts to take place, or having a pokedex so hunters may see their collection thus far. This project is not crazy and complex, just a nice little passion project I'm working on.
