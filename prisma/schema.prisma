@@ -8,22 +8,29 @@ datasource db {
 }
 
 model hunts {
-  id         String  @id @db.Uuid
   username   String? @db.VarChar(255)
   dexnum     Int
   encounters Int
   ongoing    Boolean
   game       String  @db.VarChar(255)
   method     String  @db.VarChar(255)
+  hunt_id    String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   users      users?  @relation(fields: [username], references: [username], onUpdate: NoAction, map: "fk_username")
 }
 
 model users {
-  id         Int       @id @default(autoincrement())
   username   String    @unique @db.VarChar(255)
   password   String    @db.VarChar(255)
   email      String    @unique @db.VarChar(255)
   created    DateTime  @db.Timestamp(6)
   last_login DateTime? @db.Timestamp(6)
+  user_id    String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   hunts      hunts[]
+}
+
+model pokemon {
+  pokemon_id Int     @id
+  name       String  @unique @db.VarChar(255)
+  shiny_img  String?
+  normal_img String?
 }
