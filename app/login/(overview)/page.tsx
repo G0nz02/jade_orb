@@ -1,9 +1,11 @@
 import Link from "next/link";
 import LoginForm from "@/app/ui/login-form";
+import OrbLogo from "@/app/ui/orb-logo";
 
 export default function Page() {
   return (
     <>
+      <OrbLogo />
       <div>login page</div>
       <LoginForm />
       <div>

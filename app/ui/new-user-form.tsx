@@ -1,7 +1,8 @@
+import { createUser } from "@/app/lib/action"
+
 export default function NewUserForm() {
   return (
-    <form>
-      {/* we need username, email, and password. then confirm password and make sure username is unique */}
+    <form action={createUser}>
       <div>
         <label htmlFor="username">
           Create your Username

@@ -1,6 +1,10 @@
+'use client'
+
+import { authenticate } from "@/app/lib/action";
+
 export default function LoginForm() {
   return (
-    <form>
+    <form action={authenticate}>
       <div>
         <label htmlFor="email">
           Email
