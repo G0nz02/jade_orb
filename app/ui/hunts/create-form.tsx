@@ -1,6 +1,8 @@
-export default function Form() {
+import { createHunt } from "@/app/lib/action"
+
+export default function NewHuntForm() {
   return (
-    <form>
+    <form action={createHunt}>
       {/* Pokemon */}
       <div>
         <label htmlFor="pokemon">

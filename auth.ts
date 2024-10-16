@@ -5,16 +5,15 @@ import { z } from 'zod';
 import prisma from "./db";
 import bcrypt from 'bcrypt';
 
-async function getUserHelper(email: string) {
-  const u = await prisma.users.findFirst({
-    where: {email: email}
-  })
-
-  return u;
-}
-
 async function getUser(email: string) {
-  return getUserHelper(email)
+
+  const query = async (email:string) => {
+    return await prisma.users.findFirst({
+      where: {email: email}
+    })
+  }
+
+  return query(email)
   .catch(async (e) => {
     console.error('Failed to fetch user:', e);
     throw new Error('Failed to fetch user.');
@@ -38,8 +37,8 @@ export const { auth, signIn, signOut } = NextAuth({
             if (passwordsMatch) return user;
         }
 
-          console.log('Invalid Credentials');
-          return null;
+        console.log('Invalid Credentials');
+        return null;
       },
     }),
   ],

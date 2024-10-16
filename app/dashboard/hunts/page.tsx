@@ -1,25 +1,30 @@
 import Card from "@/app/ui/hunts/card";
-import { Hunts } from "@/app/lib/placeholder-data";
 import { Metadata } from "next";
+import { fetchHunts } from "@/app/lib/data";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: "Hunts",
+  title: "Hunts",
 }
 
-//could import hunts definition from prisma client. work on getting that damn database up and running!
-export default function Page() {
-    // make a module that contains the information about a hunt
-    // should contain pokemon, number of encounters, odds + prob, and a way to increment
-    return (
-        <div className="">    
-            <p>Shiny hunting page</p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3">
-                {Hunts.map((hunt) => (
-                    <div key={hunt.id}>
-                        <Card title={hunt.dexNum} value={hunt.currNum} modifiers={hunt.boosts}/>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+export default async function Page() {
+  const hunts = await fetchHunts();
+  if (!hunts) {
+    console.log('hunts is undefined');
+    return;
+  }
+
+  return (
+    <div className="">    
+      <p>Shiny hunting page</p>
+      <Link href='/dashboard/hunts/create'>New Hunt</Link>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3">
+        {hunts.map((hunt) => (
+          <div key={hunt.hunt_id}>
+            <Card title={hunt.dexnum} value={hunt.encounters} modifiers={hunt.method}/>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

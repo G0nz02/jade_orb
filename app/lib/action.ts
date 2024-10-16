@@ -4,11 +4,9 @@ import prisma from "@/db";
 import bcrypt from 'bcrypt';
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { z } from "zod";
-import { hash } from "crypto";
-import { users } from "@prisma/client";
 
 const userFormSchema = z.object({
   id: z.string(),
@@ -19,8 +17,40 @@ const userFormSchema = z.object({
   date: z.string(),
 });
 
-const CreateUser = userFormSchema.omit({ id: true, date: true })
-const ReturningUser = userFormSchema.omit({ id: true, confirmPassword: true, date: true})
+const huntFormSchema = z.object({
+  id: z.string(),
+  username: z.string(),
+  dexnum: z.coerce.number(),
+  encounters: z.coerce.number(),
+  ongoing: z.boolean(),
+  game: z.string(),
+  method: z.string(),
+})
+
+const CreateNewHunt = huntFormSchema.omit({ id: true, username: true, encounters: true ,ongoing: true });
+const CreateUser = userFormSchema.omit({ id: true, date: true });
+
+export async function createHunt(formData: FormData) {
+  const {dexnum, game, method} = CreateNewHunt.parse({
+    dexnum: formData.get('dexnum'),
+    game: formData.get('game'),
+    method: formData.get('method'),
+  });
+
+  const userEmail = (await auth())?.user?.email;
+  if (!userEmail) {
+    console.log("Unable to pull user's email.");
+    return;
+  }
+
+  console.log(userEmail, dexnum, 0, true, game, method);
+  await insertHunt(userEmail, dexnum, 0, true, game, method).catch(async (e) => {
+    console.error('Unable to create new hunt:', e);
+    throw new Error('Unable to create new hunt');
+  });
+  revalidatePath('/dashboard/hunts');
+  redirect('/dashboard/hunts');
+}
 
 export async function createUser(formData: FormData) {
   const {username, email, password, confirmPassword} = CreateUser.parse({
@@ -28,27 +58,29 @@ export async function createUser(formData: FormData) {
     email: formData.get('email'),
     password: formData.get('password'),
     confirmPassword: formData.get('confirm-password')
-  })
+  });
 
-  if (password === confirmPassword) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const date = new Date();
-
-    const temp = await getUser(username);
-    if (!temp) {
-      insertUser(username, email, hashedPassword, date).catch(async (e) => {
-        console.error("Failed to create user: ", e);
-        throw new Error("Failed to create user.");
-      })
-
-      revalidatePath('/login');
-      redirect('/login');
-    } else {
-      console.log('User already exists');
-    }
-  } else {
+  if (password !== confirmPassword) {
     console.log('Passwords do not match');
+    return;
   }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const date = new Date();
+  const userExists = await getUser(username);
+
+  if (userExists) {
+    console.log('User already exists');
+    return;
+  }
+
+  await insertUser(username, email, hashedPassword, date).catch(async (e) => {
+    console.error("Failed to create user:", e);
+    throw new Error("Failed to create user.");
+  });
+
+  revalidatePath('/login');
+  redirect('/login');
 }
 
 export async function authenticate(formData: FormData) {
@@ -67,17 +99,20 @@ export async function authenticate(formData: FormData) {
   }
 }
 
+// Seperate functions dedicated to queries feels unnecessary?
+// Perchance scrap these and put queries in bigger functions considering these arent called in more than one function so far
 async function getUser(user: string) {
-  const q = await prisma.users.findFirst({
+  const query = await prisma.users.findFirst({
     where: {
       username: user
     }
-  })
-  return q;
+  });
+
+  return query;
 }
 
 async function insertUser(user: string, email: string, pass: string, date: Date) {
-  const q = await prisma.users.create({
+  const query = await prisma.users.create({
     data: {
       username: user,
       email: email,
@@ -85,5 +120,21 @@ async function insertUser(user: string, email: string, pass: string, date: Date)
       created: date,
     },
   });
-  return q;
+
+  return query;
+}
+
+async function insertHunt(user: string, dex: number, enc: number, ongoing: boolean, game: string, method: string) {
+  const query = await prisma.hunts.create({
+    data: {
+      user_email: user,
+      dexnum: dex,
+      encounters: enc,
+      ongoing: ongoing,
+      game: game,
+      method: method,
+    },
+  });
+
+  return query
 }
